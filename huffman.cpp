@@ -1,10 +1,41 @@
 #include "Huffman.h"
-
+#include <iostream>
+#include <fstream>
+using namespace std;
 // =======================
 // 字符频度统计
+//赵晨志编写的Stat函数
 // =======================
+const int CHAR_SET_SIZE = 256;
 void Stat(char* s, int* w, int& num) {
-   
+   // 清空频度统计
+    for(int i = 0; i < CHAR_SET_SIZE; i++) {
+        w[i] = 0;
+    }
+    
+    // 读文件统计频度
+    ifstream file("f1.txt");
+    if(!file) {
+        cout << "文件f1.txt打开失败" << endl;
+        num = 0;
+        return;
+    }
+    
+    char c;
+    while(file.get(c)) {
+        w[(unsigned char)c]++;
+    }
+    file.close();
+    
+    // 提取出现过的字符
+    num = 0;
+    for(int i = 0; i < CHAR_SET_SIZE; i++) {
+        if(w[i] > 0) {
+            s[num] = (char)i;
+            w[num] = w[i];
+            num++;
+        }
+    }
 }
 
 // =======================
