@@ -12,13 +12,81 @@ using namespace std;
 template <typename T>
 class HuffNode {
 public:
-
+    T data;           // 存储的字符
+    int weight;       // 字符频率
+    HuffNode<T>* left;
+    HuffNode<T>* right;
+    // 构造函数
+    HuffNode(T d, int w) : data(d), weight(w), left(nullptr), right(nullptr) {}
+    HuffNode(int w, HuffNode<T>* l, HuffNode<T>* r) 
+        : data(T()), weight(w), left(l), right(r) {}
+    // 判断是否为叶子节点
+    bool isLeaf() const {
+        return left == nullptr && right == nullptr;
+    }
+    // 获取权重
+    int getWeight() const {
+        return weight;
+    }
+    // 设置左右子节点
+    void setLeft(HuffNode<T>* l) { left = l; }
+    void setRight(HuffNode<T>* r) { right = r; }
+    // 获取左右子节点
+    HuffNode<T>* getLeft() const { return left; }
+    HuffNode<T>* getRight() const { return right; }
+    // 获取数据
+    T getData() const { return data; }
 };
 
 // -------- Huffman 树 --------
 template <typename T>
 class HuffTree {
+private:
+    HuffNode<T>* root;    
+public:
+    // 构造函数
+    HuffTree() : root(nullptr) {}
+    HuffTree(HuffNode<T>* r) : root(r) {}
+    
+    // 析构函数
+    ~HuffTree() {
+        clear();
+    }
+    // 获取根节点
+    HuffNode<T>* getRoot() const {
+        return root;
+    }
+    // 设置根节点
+    void setRoot(HuffNode<T>* r) {
+        root = r;
+    }
+    // 获取树的权重（根节点的权重）
+    int getWeight() const {
+        return root != nullptr ? root->getWeight() : 0;
+    }
+    // 判断树是否为空
+    bool isEmpty() const {
+        return root == nullptr;
+    }
+    // 比较运算符重载（用于最小堆）
+    bool operator>(const HuffTree<T>& other) const {
+        return getWeight() > other.getWeight();
+    }
+    // 清空树
+    void clear() {
+        clearRecursive(root);
+        root = nullptr;
+    }
 
+private:
+    // 递归删除树的辅助函数
+    void clearRecursive(HuffNode<T>* node) {
+        if (node != nullptr) {
+            clearRecursive(node->getLeft());
+            clearRecursive(node->getRight());
+            delete node;
+        }
+    }
 };
 
 // -------- 最小堆，用于构建 Huffman 树 ----------
