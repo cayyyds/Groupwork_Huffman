@@ -1,4 +1,4 @@
-#include "Huffman.h"
+#include "huffman.h"
 
 // 刘艺森编写的char_code函数
 void char_code() {

@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "lldb",
+      "request": "launch",
+      "args": [],
+      "cwd": "/Users/sjy/Desktop/CS/scu/data_structure/lab2/Groupwork_Huffman",
+      "program": "/Users/sjy/Desktop/CS/scu/data_structure/lab2/Groupwork_Huffman/build/Debug/outDebug"
+    }
+  ]
+}
