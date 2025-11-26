@@ -50,7 +50,7 @@ public:
     
     // 析构函数
     ~HuffTree() {
-        clear();
+        // clear();
     }
     // 获取根节点
     HuffNode<T>* getRoot() const {
