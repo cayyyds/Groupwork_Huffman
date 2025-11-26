@@ -84,7 +84,7 @@ void HuffmanCode(HuffNode<char>* node, char* code, int len, ofstream& fout) {
    //叶子节点，输出字符、频数、编码
     if(node->left == NULL && node->right == NULL){
         code[len + 1] = '\0';
-        fout<< node->data << "\t" << node->weight << "\t" << code <<endl;
+        fout<< node->data << "\t" << node->weight << "\t" << code << "\n";
         return;
     }
 
@@ -92,19 +92,17 @@ void HuffmanCode(HuffNode<char>* node, char* code, int len, ofstream& fout) {
     if(node->left != NULL){
         char temp[256];
         strcpy(temp,code);
-        int llen = len + 1;
-        temp[llen] = '0';
-        temp[llen+1] = '\0';
-        HuffmanCode(node->left,temp,llen,fout);
+        temp[len] = '0';
+        temp[len+1] = '\0';
+        HuffmanCode(node->left,temp,len+1,fout);
     }
 
     //处理右子树
     if(node->right != NULL){
         char temp[256];
         strcpy(temp,code);
-        int rlen = len + 1;
-        temp[rlen] = '1';
-        temp[rlen+1] = '\0';
-        HuffmanCode(node->right,temp,rlen,fout);
+        temp[len] = '1';
+        temp[len+1] = '\0';
+        HuffmanCode(node->right,temp,len+1,fout);
     }
 }
