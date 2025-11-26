@@ -103,7 +103,7 @@ public:
     void insert(const HuffTree<T>& t) {
         data[++size] = t;
         int i = size;
-        while (i > 1 && data[i].weight() < data[i/2].weight()) {
+        while (i > 1 && data[i].getWeight() < data[i/2].getWeight()) {
             swap(data[i], data[i/2]);
             i /= 2;
         }
@@ -118,9 +118,9 @@ public:
             int smallest = i;
             int l = 2*i, r = 2*i + 1;
 
-            if (l <= size && data[l].weight() < data[smallest].weight())
+            if (l <= size && data[l].getWeight() < data[smallest].getWeight())
                 smallest = l;
-            if (r <= size && data[r].weight() < data[smallest].weight())
+            if (r <= size && data[r].getWeight() < data[smallest].getWeight())
                 smallest = r;
 
             if (smallest == i) break;

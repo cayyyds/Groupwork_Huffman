@@ -84,7 +84,7 @@ void HuffmanCode(HuffNode<char>* node, char* code, int len, ofstream& fout) {
    //叶子节点，输出字符、频数、编码
     if(node->left == NULL && node->right == NULL){
         code[len + 1] = '\0';
-        fout<< node->val << "\t" << node->weight << "\t" << code <<endl;
+        fout<< node->data << "\t" << node->weight << "\t" << code <<endl;
         return;
     }
 
