@@ -9,10 +9,11 @@ void char_code() {
     int w[NUMBER];
     Stat(s, w, n);
     HuffmanTree = HuffmanBuild(s, w, n);
-    HuffmanTree->print();
+    //cout << HuffmanTree->getRoot()->getData() << "  " << HuffmanTree->getRoot()->getWeight() << endl;
     cout<<endl<<" the coding result is:"<<endl;
     Code = new char[n];
-    HuffmanCode(HuffmanTree->root(), Code, -1);
+    ofstream fout("code.txt");
+    HuffmanCode(HuffmanTree->getRoot(), Code, 0, fout);
 }
 
 void File_Code() {  }

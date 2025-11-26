@@ -3,11 +3,11 @@
   "configurations": [
     {
       "name": "C/C++ Runner: Debug Session",
-      "type": "lldb",
+      "type": "gdb",
       "request": "launch",
       "args": [],
-      "cwd": "/Users/sjy/Desktop/CS/scu/data_structure/lab2/Groupwork_Huffman",
-      "program": "/Users/sjy/Desktop/CS/scu/data_structure/lab2/Groupwork_Huffman/build/Debug/outDebug"
+      "cwd": "C:\\Users\\14714\\Desktop\\Groupwork_Huffman",
+      "program": "C:\\Users\\14714\\Desktop\\Groupwork_Huffman\\build\\Debug\\outDebug"
     }
   ]
 }
