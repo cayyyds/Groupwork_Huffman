@@ -9,12 +9,35 @@ void char_code() {
     char s[NUMBER];
     int w[NUMBER];
     Stat(s, w, n);
+    
+    // 检查是否成功读取文件
+    if (n <= 0) {
+        cout << "ERROR:无法读取文件或文件为空" << endl;
+        return;
+    }
+    
     HuffmanTree = HuffmanBuild(s, w, n);
-    //cout << HuffmanTree->getRoot()->getData() << "  " << HuffmanTree->getRoot()->getWeight() << endl;
-    cout<<endl<<" the coding result is:"<<endl;
+    
+    // 检查是否成功构建Huffman树
+    if (HuffmanTree == nullptr || HuffmanTree->getRoot() == nullptr) {
+        cout << "ERROR:构建Huffman树失败" << endl;
+        return;
+    }
+    
     Code = new char[n];
     ofstream fout("code.txt");
+    
+    // 检查文件是否成功打开
+    if (!fout) {
+        cout << "ERROR:无法创建输出文件 code.txt" << endl;
+        return;
+    }
+    
     HuffmanCode(HuffmanTree->getRoot(), Code, 0, fout);
+    fout.close();
+    
+    // 编码成功，打印输出文件名称
+    cout << "Successful! the coding result is: code.txt" << endl;
 }
 
 void File_Code() {  }
