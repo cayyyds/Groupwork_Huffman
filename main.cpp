@@ -1,4 +1,5 @@
 #include "huffman.h"
+#include <clocale>
 
 // 刘艺森编写的char_code函数
 void char_code() {
@@ -20,6 +21,7 @@ void File_Code() {  }
 void File_Decode() { }
 
 int main() {
+    setlocale(LC_ALL, "zh_CN.UTF-8");
     char option;
 
     cout << "操作命令说明：" << endl;
