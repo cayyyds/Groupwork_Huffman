@@ -1,5 +1,11 @@
 #include "huffman.h"
 #include <clocale>
+#include <map>
+#include <string>
+
+void Write(unsigned int bit);
+void WriteToOutfp();
+map<char,string> loadCodeTable(const string& filename);
 
 // 刘艺森编写的char_code函数
 void char_code() {

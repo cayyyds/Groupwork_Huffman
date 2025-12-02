@@ -8,6 +8,8 @@ using namespace std;
 
 #define NUMBER 256   // ASCII 全部字符频度统计
 
+
+
 // ------- Huffman 节点 -------
 template <typename T>
 class HuffNode {
