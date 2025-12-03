@@ -80,3 +80,11 @@ int main() {
 
     return 0;
 }
+void WriteToOutfp() { 
+    unsigned int l = buf.bits;
+    if (l > 0) {
+        for (unsigned int i = 0; i < 8 - l; i++)
+            Write(0);
+    }
+}
+
