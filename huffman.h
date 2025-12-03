@@ -8,7 +8,29 @@ using namespace std;
 
 #define NUMBER 256   // ASCII 全部字符频度统计
 
-
+//缓冲区结构体定义
+struct Buffer {
+    char ch;           // 缓冲字节（最多存 8 位）
+    unsigned int bits; // 当前写入的有效 bit 数（0~8）
+    // 构造函数
+    Buffer() : ch(0), bits(0) {}
+    
+    // 清空缓冲区
+    void clear() {
+        ch = 0;
+        bits = 0;
+    }
+    
+    // 检查缓冲区是否为空
+    bool isEmpty() const {
+        return bits == 0;
+    }
+    
+    // 检查缓冲区是否已满（8位）
+    bool isFull() const {
+        return bits == 8;
+    }
+};
 
 // ------- Huffman 节点 -------
 template <typename T>
@@ -139,5 +161,6 @@ public:
 void Stat(char* s, int* w, int& num);
 HuffTree<char>* HuffmanBuild(char* s, int* w, int num);
 void HuffmanCode(HuffNode<char>* node, char* code, int len, ofstream& fout);
+
 
 #endif
