@@ -8,29 +8,6 @@ using namespace std;
 
 #define NUMBER 256   // ASCII 全部字符频度统计
 
-//缓冲区结构体定义
-struct Buffer {
-    char ch;           // 缓冲字节（最多存 8 位）
-    unsigned int bits; // 当前写入的有效 bit 数（0~8）
-    // 构造函数
-    Buffer() : ch(0), bits(0) {}
-    
-    // 清空缓冲区
-    void clear() {
-        ch = 0;
-        bits = 0;
-    }
-    
-    // 检查缓冲区是否为空
-    bool isEmpty() const {
-        return bits == 0;
-    }
-    
-    // 检查缓冲区是否已满（8位）
-    bool isFull() const {
-        return bits == 8;
-    }
-};
 
 // ------- Huffman 节点 -------
 template <typename T>
@@ -155,12 +132,46 @@ public:
     }
 };
 
+// 赵晨志编写的Buffer结构体框架，刘艺森将其改为Buffer类，
+// 修改构造函数并添加一些成员函数（将Write和WriteToOutfp放入）
+template <typename T>
+class Buffer {
+private:
+    char ch;    // 缓冲的字节
+    unsigned int bits;  // 当前有效的bit数
+    FILE* outfp;    // 输出文件指针
 
+    void clear() {ch = 0; bits = 0;}    // clear buffer
+    bool isEmpty() const {return bits == 0;}    // check Buffer is empty
+    bool isFull() const {return bits == 8;}     // check buffer is full
+public:
+    // constructor
+    Buffer(FILE* fp = nullptr) : ch(0), bits(0), outfp() {}
+
+    // 刘艺森编写的Write函数
+    void Write(unsigned int bit){
+        ch = ch << 1;
+        ch = ch | bit;
+        bits++;
+        if (isFull()) {
+            fputc(ch, outfp);
+            clear();
+        }
+    }
+
+    // 蔡志远编写的WriteToOutfp函数
+    void WriteToOutfp() { 
+        unsigned int l = buf.bits;
+        if (l > 0) {
+            for (unsigned int i = 0; i < 8 - l; i++)
+                Write(0);
+        }
+    }
+};
 
 // ========== 函数原型 ===========
 void Stat(char* s, int* w, int& num);
 HuffTree<char>* HuffmanBuild(char* s, int* w, int num);
 void HuffmanCode(HuffNode<char>* node, char* code, int len, ofstream& fout);
-
 
 #endif
