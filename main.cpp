@@ -7,6 +7,36 @@ void Write(unsigned int bit);
 void WriteToOutfp();
 map<char,string> loadCodeTable(const string& filename);
 
+// 盛佳一编写加载码表函数，从code.txt文件中读取字符与其对应的Huffman编码
+map<char,string> loadCodeTable(const string& filename) {
+    map<char,string> codeTable;
+    ifstream fin(filename);
+    
+    if (!fin) {
+        cout << "ERROR: 无法打开文件 " << filename << endl;
+        return codeTable;
+    }
+    
+    string line;
+    while (getline(fin, line)) {
+        if (line.empty()) continue;
+        
+        // 格式: 字符\t频度\t编码
+        // 提取字符（第一个字符）
+        char ch = line[0];
+        
+        // 找到最后一个Tab，后面的内容就是编码
+        size_t lastTab = line.rfind('\t');
+        if (lastTab != string::npos && lastTab + 1 < line.length()) {
+            string code = line.substr(lastTab + 1);
+            codeTable[ch] = code;
+        }
+    }
+    
+    fin.close();
+    return codeTable;
+}
+
 // 刘艺森编写的char_code函数
 void char_code() {
     HuffTree<char>* HuffmanTree;
