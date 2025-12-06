@@ -45,8 +45,59 @@ void char_code() {
     // 编码成功，打印输出文件名称
     cout << "Successful! the coding result is: code.txt" << endl;
 }
+// 张羿弛编写的File_Code函数
+void File_Code()
+{
+    // 读取码表
+    map<char,string> codeTable = loadCodeTable("code.txt");
+    if (codeTable.empty()) {
+        cout << "ERROR: 请先执行选项 1\n";
+        return;
+    }
 
-void File_Code() {  }
+    // 打开原文件
+    ifstream fin("f1.txt", ios::binary);
+    if (!fin) {
+        cout << "ERROR: 无法打开原文件 f1.txt\n";
+        return;
+    }
+
+    // 打开输出文件
+    FILE* fp = fopen("f1_result.huf", "wb");
+    if (!fp) {
+        cout << "ERROR: 无法创建输出文件 f1_result.huf\n";
+        return;
+    }
+
+    Buffer<unsigned char> buf(fp);
+
+    unsigned long long origin_bits = 0;
+    unsigned long long coded_bits = 0;
+
+    char ch;
+    while (fin.get(ch)) {
+        string code = codeTable[ch];
+        origin_bits += 8;              // 原字符 = 8 bit
+        coded_bits  += code.length();  // Huffman 编码位数
+
+        // 写 bit
+        for (char bit : code) {
+            buf.Write(bit == '1');
+        }
+    }
+
+    // 写入最后不足 8 bit 的缓冲
+    buf.WriteToOutfp();
+
+    fclose(fp);
+    fin.close();
+
+    cout << "编码完成！输出文件:f1_result.huf\n";
+    cout << "原文件大小：" << origin_bits/8 << " bytes\n";
+    cout << "编码后:" << coded_bits/8.0 << " bytes\n";
+    cout << "压缩比 = " << (double)coded_bits / origin_bits << endl;
+}
+
 void File_Decode() { }
 
 int main() {
