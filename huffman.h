@@ -146,7 +146,7 @@ private:
     bool isFull() const {return bits == 8;}     // check buffer is full
 public:
     // constructor
-    Buffer(FILE* fp = nullptr) : ch(0), bits(0), outfp() {}
+    Buffer(FILE* fp = nullptr) : ch(0), bits(0), outfp(fp) {}
 
     // 刘艺森编写的Write函数
     void Write(unsigned int bit){
@@ -161,7 +161,7 @@ public:
 
     // 蔡志远编写的WriteToOutfp函数
     void WriteToOutfp() { 
-        unsigned int l = buf.bits;
+        unsigned int l = bits;
         if (l > 0) {
             for (unsigned int i = 0; i < 8 - l; i++)
                 Write(0);

@@ -1,1 +1,12 @@
 .vscode/
+echo "*.exe" >> .gitignore
+echo "*.out" >> .gitignore
+echo "*.o" >> .gitignore
+echo "f1.txt" >> .gitignore
+echo "f1_result.huf" >> .gitignore
+echo "code.txt" >> .gitignore
+echo "simple_code.txt" >> .gitignore
+echo "simple_test.cpp" >> .gitignore
+echo "test" >> .gitignore
+echo "simple_test" >> .gitignore
+echo "huffman_coder" >> .gitignore
