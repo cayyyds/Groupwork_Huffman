@@ -140,6 +140,7 @@ private:
     char ch;    // 缓冲的字节
     unsigned int bits;  // 当前有效的bit数
     FILE* outfp;    // 输出文件指针
+                   // 用于读 .huf 文件（解码）
 
     void clear() {ch = 0; bits = 0;}    // clear buffer
     bool isEmpty() const {return bits == 0;}    // check Buffer is empty
@@ -173,5 +174,5 @@ public:
 void Stat(char* s, int* w, int& num);
 HuffTree<char>* HuffmanBuild(char* s, int* w, int num);
 void HuffmanCode(HuffNode<char>* node, char* code, int len, ofstream& fout);
-
+void read(unsigned int &bit);
 #endif
