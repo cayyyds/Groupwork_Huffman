@@ -7,6 +7,7 @@ using namespace std;
 //赵晨志编写的Stat函数
 // =======================
 const int CHAR_SET_SIZE = 256;
+
 void Stat(char* s, int* w, int& num) {
    // 清空频度统计
     for(int i = 0; i < CHAR_SET_SIZE; i++) {
@@ -104,5 +105,28 @@ void HuffmanCode(HuffNode<char>* node, char* code, int len, ofstream& fout) {
         temp[len] = '1';
         temp[len+1] = '\0';
         HuffmanCode(node->right,temp,len+1,fout);
+    }
+}
+
+//
+void read(unsigned int &bit){
+// 使用全局输入缓冲区
+    static Buffer<unsigned char> input_buf(nullptr, true);
+    static bool initialized = false;
+    
+    if (!initialized) {
+        FILE* fp = fopen("f1_result.huf", "rb");
+        if (!fp) {
+            cout << "ERROR: 无法打开压缩文件 f1_result.huf" << endl;
+            bit = 0;
+            return;
+        }
+        // 重新初始化缓冲区（需要修改Buffer类以支持重新设置文件指针）
+        initialized = true;
+    }
+    
+    // 从缓冲区读取比特
+    if (!input_buf.Read(bit)) {
+        bit = 0;  // 文件结束
     }
 }

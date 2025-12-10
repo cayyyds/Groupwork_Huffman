@@ -140,14 +140,24 @@ private:
     char ch;    // 缓冲的字节
     unsigned int bits;  // 当前有效的bit数
     FILE* outfp;    // 输出文件指针
+    FILE* infp;    // 用于读 .huf 文件（解码）
 
     void clear() {ch = 0; bits = 0;}    // clear buffer
     bool isEmpty() const {return bits == 0;}    // check Buffer is empty
     bool isFull() const {return bits == 8;}     // check buffer is full
 public:
     // constructor
-    Buffer(FILE* fp = nullptr) : ch(0), bits(0), outfp(fp) {}
-
+   Buffer(FILE* fp = nullptr, bool is_input = false) {
+        if (is_input) {
+            infp = fp;
+            outfp = nullptr;
+        } else {
+            outfp = fp;
+            infp = nullptr;
+        }
+        ch = 0;
+        bits = 0;
+    }
     // 刘艺森编写的Write函数
     void Write(unsigned int bit){
         ch = ch << 1;
@@ -167,11 +177,28 @@ public:
                 Write(0);
         }
     }
+    bool Read(unsigned int &bit) {
+        // 如果缓冲区的比特已用完，从文件读取新字节
+        if (bits == 0) {
+            int c = fgetc(infp);
+            if (c == EOF) {
+                return false;  // 文件结束
+            }
+            ch = (unsigned char)c;
+            bits = 8;  // 新字节有8个比特待处理
+        }
+        
+        // 取出最高位比特
+        bit = (ch & 128) >> 7;  // 获取最高位
+        ch = ch << 1;           // 左移一位，丢弃已处理的比特
+        bits--;                 // 剩余比特数减1
+        return true;
+    }
 };
 
 // ========== 函数原型 ===========
 void Stat(char* s, int* w, int& num);
 HuffTree<char>* HuffmanBuild(char* s, int* w, int num);
 void HuffmanCode(HuffNode<char>* node, char* code, int len, ofstream& fout);
-
+void read(unsigned int &bit);
 #endif
