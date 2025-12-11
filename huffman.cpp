@@ -155,7 +155,25 @@ HuffTree<char>* BuildTreeFromCodeFile(const string& filename){
     return new HuffTree<char>(root);
 }
 
-//huffman译码：Read实现
+//
 void read(unsigned int &bit){
-
+// 使用全局输入缓冲区
+    static Buffer<unsigned char> input_buf(nullptr, true);
+    static bool initialized = false;
+    
+    if (!initialized) {
+        FILE* fp = fopen("f1_result.huf", "rb");
+        if (!fp) {
+            cout << "ERROR: 无法打开压缩文件 f1_result.huf" << endl;
+            bit = 0;
+            return;
+        }
+        // 重新初始化缓冲区（需要修改Buffer类以支持重新设置文件指针）
+        initialized = true;
+    }
+    
+    // 从缓冲区读取比特
+    if (!input_buf.Read(bit)) {
+        bit = 0;  // 文件结束
+    }
 }

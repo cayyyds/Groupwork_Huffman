@@ -36,10 +36,6 @@ map<char,string> loadCodeTable(const string& filename) {
     fin.close();
     return codeTable;
 }
-// huffman译码：利用 code.txt 中的 “字符 频度 编码” 重建一棵 Huffman 树
-HuffTree<char>* BuildTreeFromCodeFile(const string& filename){
-
-}
 
 // 刘艺森编写的char_code函数
 void char_code() {
@@ -131,8 +127,40 @@ void File_Code()
     cout << "编码后:" << coded_bits/8.0 << " bytes\n";
     cout << "压缩比 = " << (double)coded_bits / origin_bits << endl;
 }
-//huffman解码：File_Decode函数实现
-void File_Decode() { }
+
+void File_Decode() {
+    // 加载解码表
+    map<char, string> codeTable = loadCodeTable("code.txt");
+    map<string, char> decodeMap;
+    for (auto& p : codeTable) decodeMap[p.second] = p.first;
+    
+    // 解码
+    FILE* in = fopen("f1_result.huf", "rb");
+    FILE* out = fopen("f1_decoded.txt", "w");
+    
+    unsigned char byte;
+    string code;
+    int count = 0;
+    
+    // 解码直到文件末尾g++ -o huffman.exe main.cpp
+    while (fread(&byte, 1, 1, in)) {
+        for (int i = 7; i >= 0; i--) {
+            code += (byte >> i) & 1 ? '1' : '0';
+            
+            if (decodeMap.count(code)) {
+                fputc(decodeMap[code], out);
+                count++;
+                code.clear();
+            }
+        }
+    }
+    
+    fclose(in);
+    fclose(out);
+    
+    cout << "解码完成！解码了 " << count << " 个字符\n";
+    cout << "输出文件: f1_decoded.txt\n";
+}
 
 int main() {
     setlocale(LC_ALL, "zh_CN.UTF-8");
@@ -165,3 +193,5 @@ int main() {
 
     return 0;
 }
+
+
