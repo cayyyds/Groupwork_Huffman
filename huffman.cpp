@@ -108,6 +108,53 @@ void HuffmanCode(HuffNode<char>* node, char* code, int len, ofstream& fout) {
     }
 }
 
+// 刘艺森编写的BuildTreeFromCodeFile函数
+// huffman译码：利用 code.txt 中的 “字符 频度 编码” 重建一棵 Huffman 树
+HuffTree<char>* BuildTreeFromCodeFile(const string& filename){
+    // 1.读取code.txt文件
+    map<char, string> codeMap;
+    codeMap = loadCodeTable(filename);
+    
+    // 2.创建root节点
+    HuffNode<char>* root = new HuffNode<char>(0, nullptr, nullptr);
+
+    // 3.创建中间节点
+    // 对每一个字符编码对进行操作
+    for (auto& pair : codeMap) {
+        char ch = pair.first;
+        string code = pair.second;
+
+        HuffNode<char>* current = root;
+        // 对每一个字符从根节点开始往下创建内部节点，到第n-2个bit为止
+        for (int i = 0; i < code.length() - 1; i++) {
+            if (code[i] == '0') {
+                if(current->left == nullptr) {
+                    current->left = new HuffNode<char>(0, nullptr, nullptr);
+                } else {
+                    cout << "ERROR: 此时该节点已经创建过左子树"  << endl;
+                }
+                current = current->left;
+            } else {
+                if (current->right == nullptr) {
+                    current->right = new HuffNode<char>(0, nullptr,nullptr);
+                } else {
+                    cout << "ERROR: 此时该节点已经创建过右子树" << endl;
+                }
+                current = current->right;
+            }
+        }
+        // 创建叶子节点
+        if (code.back() == '0') {
+            current = new HuffNode<char>(ch, 0);    // 解码时建树不需要频度
+        } else {
+            current = new HuffNode<char>(ch, 0);
+        }
+    }
+
+    // 4.返回重建的树
+    return new HuffTree<char>(root);
+}
+
 //huffman译码：Read实现
 void read(unsigned int &bit){
 
