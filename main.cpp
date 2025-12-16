@@ -23,11 +23,21 @@ map<char,string> loadCodeTable(const string& filename) {
         
         // 格式: 字符\t频度\t编码
         // 提取字符（第一个字符）
-        char ch = line[0];
+        char ch;
+        size_t charEndPos;  // 字符结束后的位置（即第一个Tab的位置）
+        
+        // 处理转义字符：如果行首是 \n，表示换行符
+        if (line.length() >= 2 && line[0] == '\\' && line[1] == 'n') {
+            ch = '\n';  // 将转义表示转换为实际的换行符
+            charEndPos = 2;  // 转义序列占2个字符
+        } else {
+            ch = line[0];
+            charEndPos = 1;
+        }
         
         // 找到最后一个Tab，后面的内容就是编码
         size_t lastTab = line.rfind('\t');
-        if (lastTab != string::npos && lastTab + 1 < line.length()) {
+        if (lastTab != string::npos && lastTab >= charEndPos && lastTab + 1 < line.length()) {
             string code = line.substr(lastTab + 1);
             codeTable[ch] = code;
         }
