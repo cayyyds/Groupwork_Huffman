@@ -2,6 +2,7 @@
 #include <clocale>
 #include <map>
 #include <string>
+#include <windows.h>  // 为控制台设置 UTF-8 编码
 
 void Write(unsigned int bit);
 void WriteToOutfp();
@@ -129,13 +130,20 @@ void File_Code()
     // 写入最后不足 8 bit 的缓冲
     buf.WriteToOutfp();
 
+    // 记录末尾填充的0的个数，写入文件最后1个字节
+    unsigned char padding = (8 - (coded_bits % 8)) % 8;
+    fwrite(&padding, 1, 1, fp);
+
+    // 获取实际文件大小
+    long actual_file_size = ftell(fp);
+
     fclose(fp);
     fin.close();
 
     cout << "编码完成！输出文件:f1_result.huf\n";
     cout << "原文件大小：" << origin_bits/8 << " bytes\n";
-    cout << "编码后:" << coded_bits/8.0 << " bytes\n";
-    cout << "压缩比 = " << (double)coded_bits / origin_bits << endl;
+    cout << "编码后:" << actual_file_size << " bytes\n";
+    cout << "压缩比 = " << (double)origin_bits/8 / actual_file_size << endl;
 }
 
 void File_Decode() {
@@ -146,15 +154,31 @@ void File_Decode() {
     
     // 解码
     FILE* in = fopen("f1_result.huf", "rb");
-    FILE* out = fopen("f1_decoded.txt", "w");
+    FILE* out = fopen("f1_decoded.txt", "wb");
     
+    // 获取文件大小，读取最后一个字节（填充位数）
+    fseek(in, 0, SEEK_END);
+    long fileSize = ftell(in);
+    unsigned char padding = 0;
+    if (fileSize > 0) {
+        fseek(in, -1, SEEK_END);
+        fread(&padding, 1, 1, in);
+    }
+    fseek(in, 0, SEEK_SET); // 回到文件开头
+
     unsigned char byte;
     string code;
     int count = 0;
+    long processedBytes = 0;
+    long dataBytes = fileSize - 1; // 除去最后一个记录填充数的字节
     
-    // 解码直到文件末尾g++ -o huffman.exe main.cpp
-    while (fread(&byte, 1, 1, in)) {
-        for (int i = 7; i >= 0; i--) {
+    // 解码直到文件末尾
+    while (processedBytes < dataBytes && fread(&byte, 1, 1, in)) {
+        processedBytes++;
+        // 如果是最后一个数据字节，忽略填充的位
+        int endBit = (processedBytes == dataBytes) ? padding : 0;
+
+        for (int i = 7; i >= endBit; i--) {
             code += (byte >> i) & 1 ? '1' : '0';
             
             if (decodeMap.count(code)) {
@@ -174,6 +198,8 @@ void File_Decode() {
 
 int main() {
     setlocale(LC_ALL, "zh_CN.UTF-8");
+    SetConsoleOutputCP(CP_UTF8); // 控制台输出使用 UTF-8
+    SetConsoleCP(CP_UTF8);       // 控制台输入使用 UTF-8
     char option;
 
     cout << "操作命令说明：" << endl;
