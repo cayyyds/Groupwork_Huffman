@@ -1,6 +1,8 @@
 #include "huffman.h"
 #include <iostream>
 #include <fstream>
+#include <map>
+#include <sstream>
 using namespace std;
 // =======================
 // 字符频度统计

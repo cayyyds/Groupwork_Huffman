@@ -4,6 +4,8 @@
 #include <iostream>
 #include <fstream>
 #include <cstring>
+#include <map>
+#include <string>
 using namespace std;
 
 #define NUMBER 256   // ASCII 全部字符频度统计
@@ -201,4 +203,5 @@ void Stat(char* s, int* w, int& num);
 HuffTree<char>* HuffmanBuild(char* s, int* w, int num);
 void HuffmanCode(HuffNode<char>* node, char* code, int len, ofstream& fout);
 void read(unsigned int &bit);
+map<char, string> loadCodeTable(const string& filename);
 #endif
